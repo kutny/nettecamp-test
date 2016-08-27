@@ -1,0 +1,31 @@
+version: '2'
+services:
+    nettecamp-test-nginx:
+        container_name: nettecamp-test-nginx
+        build: docker/images/nettecamp-test-nginx
+        image: nettecamp-test-nginx
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+        expose:
+            - 80
+        ports:
+            - "80:80"
+        environment:
+            - VIRTUAL_HOST=nettecamp-test.dev
+        links:
+            - nettecamp-test-php
+        volumes:
+            - ./:/app
+        depends_on:
+            - nettecamp-test-php
+        restart: always
+
+    nettecamp-test-php:
+        container_name: nettecamp-test-php
+        build: docker/images/nettecamp-test-php
+        image: nettecamp-test-php
+        volumes:
+            - ./:/app
+            - /etc/localtime:/etc/localtime:ro
+        working_dir: /app
+        restart: always
